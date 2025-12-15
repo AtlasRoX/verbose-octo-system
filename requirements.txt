@@ -5,3 +5,4 @@ pillow
 plotly
 numpy
 opencv-python-headless
+matplotlib
