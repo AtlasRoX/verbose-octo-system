@@ -693,21 +693,9 @@ with tab4:
 # ----------------------------
 st.markdown("---")
 
-# Footer content using native Streamlit
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown("""
-    <div style='text-align: center;'>
-        <h2 style='color: #4f46e5; margin-bottom: 5px;'>🫁 Pneumonia Detection AI</h2>
-        <p style='color: #6366f1; font-size: 1rem;'>Powered by Deep Learning & Computer Vision</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.info("🎨 **Designed and Developed by GhostCache_**", icon="✨")
-    
-    st.markdown("""
-    <div style='text-align: center; color: #64748b; margin-top: 15px;'>
-        <p style='font-size: 0.9rem;'>Built with PyTorch • Streamlit • Plotly</p>
-        <p style='font-size: 0.85rem; color: #94a3b8;'>© 2025 | All Rights Reserved</p>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<div style='text-align: center; color: #94a3b8; padding: 20px 0;'>
+    <p style='font-size: 0.9rem; margin-bottom: 5px;'>Designed and Developed by <strong style='color: #6366f1;'>GhostCache_</strong></p>
+    <p style='font-size: 0.85rem; color: #64748b;'>Built with PyTorch • Streamlit • Plotly</p>
+</div>
+""", unsafe_allow_html=True)
