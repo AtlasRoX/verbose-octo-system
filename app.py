@@ -5,6 +5,9 @@ import torch.nn as nn
 import numpy as np
 from torchvision import transforms
 from PIL import Image
+import csv
+import os
+from datetime import datetime
 from utils import (
     create_confidence_gauge, 
     create_probability_chart,
@@ -157,6 +160,23 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# ----------------------------
+# Feedback Collection Function
+# ----------------------------
+def save_feedback(feedback_data):
+    """Save user feedback to CSV file"""
+    feedback_file = 'feedback_data.csv'
+    file_exists = os.path.isfile(feedback_file)
+    
+    with open(feedback_file, 'a', newline='', encoding='utf-8') as f:
+        fieldnames = ['timestamp', 'prediction', 'confidence', 'feedback', 'validation_passed']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        
+        if not file_exists:
+            writer.writeheader()
+        
+        writer.writerow(feedback_data)
 
 # ----------------------------
 # Load Model
@@ -381,6 +401,42 @@ with tab1:
             The model indicates the chest X-ray appears normal with no significant signs of pneumonia.
             Regular medical check-ups are still recommended.
             """)
+        
+        # Feedback Collection System
+        st.markdown("---")
+        st.markdown("### 📝 Help Us Improve!")
+        st.write("Was this prediction helpful? Your feedback helps improve the model.")
+        
+        col_feedback1, col_feedback2, col_feedback3 = st.columns([1, 1, 2])
+        
+        with col_feedback1:
+            if st.button("👍 Correct Prediction", use_container_width=True, type="primary"):
+                # Save feedback to CSV
+                feedback_data = {
+                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'prediction': 'Pneumonia' if is_pneumonia else 'Normal',
+                    'confidence': f"{prob*100:.1f}%" if is_pneumonia else f"{(1-prob)*100:.1f}%",
+                    'feedback': 'correct',
+                    'validation_passed': validation_passed
+                }
+                save_feedback(feedback_data)
+                st.success("✅ Thank you for your feedback!", icon="🎉")
+        
+        with col_feedback2:
+            if st.button("👎 Incorrect Prediction", use_container_width=True):
+                # Save feedback to CSV
+                feedback_data = {
+                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'prediction': 'Pneumonia' if is_pneumonia else 'Normal',
+                    'confidence': f"{prob*100:.1f}%" if is_pneumonia else f"{(1-prob)*100:.1f}%",
+                    'feedback': 'incorrect',
+                    'validation_passed': validation_passed
+                }
+                save_feedback(feedback_data)
+                st.warning("📊 Thank you! This helps us improve the model.", icon="🙏")
+        
+        with col_feedback3:
+            st.caption("💡 Your feedback is saved anonymously and used to improve model accuracy.")
     
     else:
         st.info("👆 Please upload a chest X-ray image to get started")
@@ -639,6 +695,7 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #64748b; padding: 20px;'>
     <p>🫁 <strong>Pneumonia Detection AI</strong> | Powered by Deep Learning</p>
-    <p style='font-size: 0.9rem;'>Built with PyTorch, Streamlit, and Plotly | © 2025</p>
+    <p style='font-size: 0.9rem;'>Designed and developed By <strong>GhostCache_</strong></p>
+    <p style='font-size: 0.85rem; margin-top: 10px;'>Built with PyTorch, Streamlit, and Plotly | © 2025</p>
 </div>
 """, unsafe_allow_html=True)
