@@ -244,51 +244,24 @@ tab1, tab2, tab3, tab4 = st.tabs(["🔍 Prediction", "🏗️ Architecture", "�
 with tab1:
     st.markdown("### Upload Chest X-Ray Image")
     
-    # Prominent Warning Banner with Custom Styling
-    st.markdown("""
-    <div style='
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-        padding: 25px;
-        border-radius: 15px;
-        border-left: 6px solid #c92a2a;
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        margin-bottom: 20px;
-    '>
-        <h3 style='color: white; margin: 0 0 15px 0; font-size: 1.3rem; display: flex; align-items: center;'>
-            <span style='font-size: 1.8rem; margin-right: 12px;'>⚠️</span>
-            <strong>IMPORTANT: This Tool ONLY Works with Chest X-Ray Images!</strong>
-        </h3>
-        
-        <div style='background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px;'>
-            <div style='color: white; line-height: 1.8; font-size: 1.05rem;'>
-                <div style='margin-bottom: 10px;'>
-                    <span style='font-size: 1.3rem; margin-right: 8px;'>✅</span>
-                    <strong>DO</strong> upload frontal chest X-ray images (PA or AP view)
-                </div>
-                <div style='margin-bottom: 10px;'>
-                    <span style='font-size: 1.3rem; margin-right: 8px;'>❌</span>
-                    <strong>DON'T</strong> upload random photos, selfies, or non-medical images
-                </div>
-                <div>
-                    <span style='font-size: 1.3rem; margin-right: 8px;'>❌</span>
-                    <strong>DON'T</strong> expect accurate results on non-X-ray images
-                </div>
-            </div>
-        </div>
-        
-        <div style='
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 3px solid rgba(255, 255, 255, 0.5);
-        '>
-            <p style='color: white; margin: 0; font-size: 0.95rem; font-style: italic;'>
-                💡 <strong>Note:</strong> The AI cannot detect if your image is a chest X-ray - it will try to classify anything you upload!
-            </p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Prominent Warning Banner using Streamlit components
+    st.error("""
+    ### ⚠️ IMPORTANT: This Tool ONLY Works with Chest X-Ray Images!
+    
+    **What TO DO:**
+    - ✅ Upload frontal chest X-ray images (PA or AP view)
+    - ✅ Use medical imaging files only
+    
+    **What NOT TO DO:**
+    - ❌ Upload random photos, selfies, or non-medical images  
+    - ❌ Expect accurate results on non-X-ray images
+    - ❌ Use this for actual medical diagnosis
+    
+    ---
+    
+    💡 **Important Note:** The AI cannot automatically detect if your image is a chest X-ray. 
+    It will attempt to classify ANY image you upload, but results will be meaningless for non-X-ray images!
+    """, icon="⚠️")
     
     uploaded_file = st.file_uploader(
         "Drop your X-ray image here or click to browse",
