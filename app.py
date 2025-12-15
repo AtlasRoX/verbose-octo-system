@@ -306,7 +306,7 @@ with tab1:
         
         if not validation_passed:
             st.error("""
-            🚫 **Warning: This image may not be a chest X-ray!**
+            **Warning: This image may not be a chest X-ray!**
             
             The uploaded image doesn't match typical chest X-ray characteristics:
             - Image size: {}x{} (need at least 224x224)
@@ -344,7 +344,7 @@ with tab1:
         very_confident = (prob > 0.95 or prob < 0.05)
         if very_confident and not validation_passed:
             st.warning("""
-            ⚠️ **Suspicious Prediction Detected**
+            **Suspicious Prediction Detected**
             
             The model is extremely confident ({:.1f}%), which is unusual for unclear images.
             This strongly suggests the image is not a chest X-ray.
@@ -693,9 +693,44 @@ with tab4:
 # ----------------------------
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #64748b; padding: 20px;'>
-    <p>🫁 <strong>Pneumonia Detection AI</strong> | Powered by Deep Learning</p>
-    <p style='font-size: 0.9rem;'>Designed and developed By <strong>GhostCache_</strong></p>
-    <p style='font-size: 0.85rem; margin-top: 10px;'>Built with PyTorch, Streamlit, and Plotly | © 2025</p>
+<div style='
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border-radius: 15px;
+    margin-top: 40px;
+'>
+    <div style='margin-bottom: 15px;'>
+        <span style='font-size: 2rem;'>🫁</span>
+    </div>
+    
+    <h3 style='color: #4f46e5; margin: 0 0 10px 0; font-size: 1.4rem;'>
+        Pneumonia Detection AI
+    </h3>
+    
+    <p style='color: #6366f1; font-size: 1rem; margin: 5px 0;'>
+        Powered by Deep Learning & Computer Vision
+    </p>
+    
+    <div style='
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        display: inline-block;
+    '>
+        <p style='color: #1e293b; font-size: 1.05rem; margin: 0; font-weight: 600;'>
+            🎨 Designed and Developed by <span style='color: #6366f1;'>GhostCache_</span>
+        </p>
+    </div>
+    
+    <div style='margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(99, 102, 241, 0.2);'>
+        <p style='color: #64748b; font-size: 0.9rem; margin: 5px 0;'>
+            Built with PyTorch • Streamlit • Plotly
+        </p>
+        <p style='color: #94a3b8; font-size: 0.85rem; margin: 5px 0;'>
+            © 2025 | All Rights Reserved
+        </p>
+    </div>
 </div>
 """, unsafe_allow_html=True)
