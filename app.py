@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 import torchvision.models as models
 import torch.nn as nn
+import numpy as np
 from torchvision import transforms
 from PIL import Image
 from utils import (
