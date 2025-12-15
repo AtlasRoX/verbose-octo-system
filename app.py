@@ -304,9 +304,9 @@ with tab1:
             st.image(image, use_container_width=True)
             
             if validation_passed:
-                st.success("✅ Image validation passed", icon="✅")
+                st.success("Image validation passed", icon="✅")
             else:
-                st.error("❌ Image validation failed", icon="❌")
+                st.error("Image validation failed", icon="❌")
         
         # Make prediction
         input_tensor = transform(image).unsqueeze(0).to(device)
