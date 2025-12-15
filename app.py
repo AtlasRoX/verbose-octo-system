@@ -243,6 +243,17 @@ tab1, tab2, tab3, tab4 = st.tabs(["🔍 Prediction", "🏗️ Architecture", "�
 with tab1:
     st.markdown("### Upload Chest X-Ray Image")
     
+    # Prominent Warning Banner
+    st.warning("""
+    ⚠️ **IMPORTANT: This tool ONLY works with chest X-ray images!**
+    
+    - ✅ Upload frontal chest X-ray images (PA or AP view)
+    - ❌ DO NOT upload random photos, selfies, or non-medical images
+    - ❌ Results on non-X-ray images are meaningless and invalid
+    
+    The AI cannot detect if your image is a chest X-ray - it will try to classify anything you upload!
+    """, icon="⚠️")
+    
     uploaded_file = st.file_uploader(
         "Drop your X-ray image here or click to browse",
         type=["jpg", "jpeg", "png"],
@@ -253,21 +264,70 @@ with tab1:
         # Load and display image
         image = Image.open(uploaded_file).convert("L")
         
+        # Basic image validation
+        img_array = np.array(image)
+        height, width = img_array.shape
+        aspect_ratio = width / height
+        
+        # Check if image looks like a chest X-ray (basic heuristics)
+        is_grayscale = len(img_array.shape) == 2
+        reasonable_size = (height >= 224 and width >= 224)
+        reasonable_aspect = (0.6 <= aspect_ratio <= 1.4)  # X-rays are roughly square-ish
+        
+        # Calculate image statistics
+        mean_intensity = np.mean(img_array)
+        std_intensity = np.std(img_array)
+        
+        # Medical images typically have certain characteristics
+        likely_medical = (mean_intensity > 50 and std_intensity > 20)
+        
+        validation_passed = reasonable_size and reasonable_aspect and likely_medical
+        
+        if not validation_passed:
+            st.error("""
+            🚫 **Warning: This image may not be a chest X-ray!**
+            
+            The uploaded image doesn't match typical chest X-ray characteristics:
+            - Image size: {}x{} (need at least 224x224)
+            - Aspect ratio: {:.2f} (expected 0.6-1.4 for chest X-rays)
+            - Image properties suggest this might not be a medical image
+            
+            **Prediction results below are likely INVALID and meaningless.**
+            Please upload a proper chest X-ray image for accurate results.
+            """.format(width, height, aspect_ratio), icon="🚫")
+        
         col1, col2 = st.columns([1, 1])
         
         with col1:
-            st.markdown("#### 📸 Original X-Ray")
+            st.markdown("#### 📸 Original Image")
             st.image(image, use_container_width=True)
+            
+            if validation_passed:
+                st.success("✅ Image validation passed", icon="✅")
+            else:
+                st.error("❌ Image validation failed", icon="❌")
         
         # Make prediction
-        input_tensor = transform(image).unsqueeze(0)
+        input_tensor = transform(image).unsqueeze(0).to(device)
         input_tensor.requires_grad = True
         
         with torch.no_grad():
             output = model(input_tensor)
             prob = torch.sigmoid(output).item()
         
-        is_pneumonia = prob > 0.65
+        # Apply confidence threshold
+        confidence_threshold = 0.65
+        is_pneumonia = prob > confidence_threshold
+        
+        # Check if prediction confidence is too extreme (suspicious)
+        very_confident = (prob > 0.95 or prob < 0.05)
+        if very_confident and not validation_passed:
+            st.warning("""
+            ⚠️ **Suspicious Prediction Detected**
+            
+            The model is extremely confident ({:.1f}%), which is unusual for unclear images.
+            This strongly suggests the image is not a chest X-ray.
+            """.format(prob * 100 if is_pneumonia else (1-prob) * 100), icon="⚠️")
         
         with col2:
             st.markdown("#### 🔥 Grad-CAM Heatmap")
