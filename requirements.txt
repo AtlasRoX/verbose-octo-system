@@ -4,4 +4,4 @@ torchvision
 pillow
 plotly
 numpy
-opencv-python
+opencv-python-headless
