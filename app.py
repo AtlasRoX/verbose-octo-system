@@ -244,23 +244,15 @@ tab1, tab2, tab3, tab4 = st.tabs(["🔍 Prediction", "🏗️ Architecture", "�
 with tab1:
     st.markdown("### Upload Chest X-Ray Image")
     
-    # Prominent Warning Banner using Streamlit components
+    # Compact Warning Banner
     st.error("""
-    ### ⚠️ IMPORTANT: This Tool ONLY Works with Chest X-Ray Images!
-    
-    **What TO DO:**
-    - ✅ Upload frontal chest X-ray images (PA or AP view)
-    - ✅ Use medical imaging files only
-    
-    **What NOT TO DO:**
-    - ❌ Upload random photos, selfies, or non-medical images  
-    - ❌ Expect accurate results on non-X-ray images
-    - ❌ Use this for actual medical diagnosis
-    
-    ---
-    
-    💡 **Important Note:** The AI cannot automatically detect if your image is a chest X-ray. 
-    It will attempt to classify ANY image you upload, but results will be meaningless for non-X-ray images!
+**IMPORTANT: This tool ONLY works with chest X-ray images!**
+
+**✅ DO:** Upload frontal chest X-ray images (PA or AP view)
+
+**❌ DON'T:** Upload random photos, selfies, or non-medical images
+
+💡 The AI cannot detect if your image is a chest X-ray - it will try to classify anything you upload, but results will be meaningless for non-X-ray images!
     """, icon="⚠️")
     
     uploaded_file = st.file_uploader(
